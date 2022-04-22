@@ -1,7 +1,6 @@
 # Blackjack project
-# cards = [11, 2, 3, 4, 5, 6, 7, 8]
 
-# cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 import random
 import os
 def clear():
@@ -19,7 +18,8 @@ def calculate_score(card_list):
         card_list.remove(11)
         card_list.append(1)
     return score
-def game():
+def game_ai():
+    global user_score
     user_score = calculate_score(user_cards)
     print(user_score)
     if user_score == 0 or computer_score == 0:
@@ -32,7 +32,7 @@ def game():
             return
         elif user_continue_choice == "y":
             user_cards.append(deal_card())
-        game()
+        game_ai()
 def compare(user_score_function, computer_score_function):
     if user_score_function == computer_score_function:
         print(f"It's a draw! Your score is {user_score_function}. Game over!")
@@ -49,6 +49,7 @@ def compare(user_score_function, computer_score_function):
             print(f"You win! Your score is {user_score_function}, and the dealer's score is {computer_score_function}. Game over!")
         elif computer_score_function > user_score_function:
             print(f"You lose! Your score is {user_score_function}, and the dealer's score is {computer_score_function}. Game over!")
+
 user_cards = []
 computer_cards = []
 def deal_cards_new_game():
@@ -56,31 +57,27 @@ def deal_cards_new_game():
     user_cards.append(deal_card())
     computer_cards.append(deal_card())
     computer_cards.append(deal_card())
-
-deal_cards_new_game()
-user_score = calculate_score(user_cards)
-computer_score = calculate_score(computer_cards)
-
-while computer_score < 17:
-    computer_cards.append(deal_card())
-    computer_score = calculate_score(computer_cards)
-
-game()
-compare(user_score, computer_score)
-
-restart_input = input("Would you like to restart? Type 'y' for yes and 'n' for no. ").lower()
-if restart_input == "y":
-    clear()
-    user_cards = []
-    computer_cards = []
+def game():
+    global user_score, computer_score
+    user_cards.clear()
+    computer_cards.clear()
     deal_cards_new_game()
     user_score = calculate_score(user_cards)
     computer_score = calculate_score(computer_cards)
+
     while computer_score < 17:
         computer_cards.append(deal_card())
         computer_score = calculate_score(computer_cards)
-    game()
+
+    game_ai()
     compare(user_score, computer_score)
-else:
-    clear()
-    print("Thank you for playing!")
+
+    restart_input = input("Would you like to restart? Type 'y' for yes and 'n' for no. ").lower()
+    if restart_input == "y":
+        clear()
+        game()
+    else:
+        clear()
+        print("Thanks for playing!")
+
+game()
