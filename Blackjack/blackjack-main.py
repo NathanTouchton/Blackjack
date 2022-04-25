@@ -3,12 +3,38 @@
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 import random
 import os
+user_cards = []
+computer_cards = []
+user_card_names = []
+high_numbers = ["10", "Jack", "Queen", "King"]
+cards_dictionary = {
+    11: "Ace",
+    1: "Ace",
+    2: "2",
+    3: "3",
+    4: "4",
+    5: "5",
+    6: "6",
+    7: "7",
+    8: "8",
+    9: "9",
+}
 def clear():
     os.system('clear')
 
 def deal_card():
     card = random.choice(cards)
     return card
+
+def display_hand():
+    for card in user_cards:
+        if card in cards_dictionary:
+            user_card_names.append(cards_dictionary[card])
+        if card == 10:
+            user_card_names.append(random.choice(high_numbers))
+    print("Your hand is: ")
+    for name in user_card_names:
+        print(name)
 
 def calculate_score(card_list):
     score = sum(card_list)
@@ -18,10 +44,14 @@ def calculate_score(card_list):
         card_list.remove(11)
         card_list.append(1)
     return score
+
 def game_ai():
     global user_score
+    clear()
     user_score = calculate_score(user_cards)
-    print(user_score)
+    user_card_names.clear()
+    display_hand()
+    print(f"Your score is: {user_score}")
     if user_score == 0 or computer_score == 0:
         return
     elif user_score > 21:
@@ -33,6 +63,7 @@ def game_ai():
         elif user_continue_choice == "y":
             user_cards.append(deal_card())
         game_ai()
+
 def compare(user_score_function, computer_score_function):
     if user_score_function == computer_score_function:
         print(f"It's a draw! Your score is {user_score_function}. Game over!")
@@ -50,8 +81,6 @@ def compare(user_score_function, computer_score_function):
         elif computer_score_function > user_score_function:
             print(f"You lose! Your score is {user_score_function}, and the dealer's score is {computer_score_function}. Game over!")
 
-user_cards = []
-computer_cards = []
 def deal_cards_new_game():
     user_cards.append(deal_card())
     user_cards.append(deal_card())
